@@ -1,0 +1,16 @@
+name: Notify Portal
+
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch to Portal
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PROJECT_REPO_PAT }}
+          repository: <ORGANIZATION>/<PORTAL_REPO_NAME> # ★案件作成時に書き換える
+          event-type: app-update
+          client-payload: '{"app_name": "<APP_NAME>", "remote_url": "https://github.com/${{ github.repository }}.git"}'
