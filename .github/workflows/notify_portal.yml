@@ -13,4 +13,4 @@ jobs:
           token: ${{ secrets.PROJECT_REPO_PAT }}
           repository: <ORGANIZATION>/<PORTAL_REPO_NAME> # ★案件作成時に書き換える
           event-type: app-update
-          client-payload: '{"app_name": "<APP_NAME>", "remote_url": "https://github.com/${{ github.repository }}.git"}'
+          client-payload: '{"app_name": "<APP_NAME>", "remote_url": "https://github.com/${{ github.repository }}.git"}' # ★案件作成時に書き換える
