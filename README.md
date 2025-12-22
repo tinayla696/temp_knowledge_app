@@ -1,45 +1,33 @@
-# Application Template Repository
+# [App Name] Application Repository
 
-## 1. アプリ用テンプレート（`temp_knowledge_app`）
+本リポジトリは、アプリケーションのソースコードおよび詳細仕様書を管理する子リポジトリです。
+親リポジトリ (Portal) と連携し、ドキュメントの更新は自動的にポータルサイトへ反映されます。
 
-子リポジトリのひな型として、アプリケーションリポジトリのテンプレートを提供します。  
-このテンプレートは、新しいアプリケーションリポジトリを迅速にセットアップするための基本的な構造と設定を含んでいます。
+## 🏁 セットアップ手順 (初回のみ)
 
-### ディレクトリ構成：
+### 1. ワークフロー設定
+`.github/workflows/notify_portal.yml` を開き、以下の箇所を修正してコミットしてください [cite: 580]。
+* `repository`: 親リポジトリ名 (例: `org/project_portal`)
+* `app_name`: アプリ名 (例: `sales_app`)
 
-```tree
-/
-├── .github/
-│   └── workflows/
-│       └── notify_portal.yml      # [重要] 親へ更新を通知するCI
-├── docs/
-│   └── index.md                   # アプリケーションのドキュメント表紙
-├── src/                           # ソースコード置き場
-├── .gitignore
-├── amplify.yml                    # Amplifyビルド設定
-├── mkdocs.yml                     # MkDocs設定
-├── README.md                      # このファイル
-└── requirements.txt               # 依存ライブラリ
-```
+### 2. Secrets設定
+`Settings` > `Secrets and variables` > `Actions` に以下を登録してください [cite: 474]。
+* **Name:** `PROJECT_REPO_PAT`
+* **Value:** 管理者の Personal Access Token (Repo権限付き)
 
-#### 主要ファイルの中身
+## 🛠 開発ルール (Docs as Code)
 
-`.github/workflows/notify_portal.yml`
+### 1. ブランチ命名規則 [cite: 511]
+| Prefix | 用途 | 例 |
+| :--- | :--- | :--- |
+| `feature/` | 新機能 (Minor Update) | `feature/login` |
+| `bugfix/` | バグ修正 (Patch Update) | `bugfix/header` |
+| `docs/` | ドキュメントのみ | `docs/manual` |
 
-```yaml
-name: Notify Portal
-on:
-  push:
-    branches: [ "main" ]
-jobs:
-  dispatch:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Dispatch to Portal
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          token: ${{ secrets.PROJECT_REPO_PAT }}
-          repository: <ORGANIZATION>/<PORTAL_REPO_NAME> # ★案件作成時に書き換える
-          event-type: app-update
-          client-payload: '{"app_name": "<APP_NAME>", "remote_url": "https://github.com/${{ github.repository }}.git"}'
-```
+### 2. 実装・PRルール
+* **ドキュメント同期:** コード修正時は、必ず同じPR内で `docs/` 配下も修正してください [cite: 526]。
+* **PR記述:** Description に必ず `Closes #Issue番号` を記述してください [cite: 532]。
+* **マージ:** **Squash and Merge** が必須です [cite: 543]。
+
+## 📦 リリース
+PRが `main` にマージされると、**自動的にタグが付与され**、親リポジトリへ同期・デプロイされます。手動でのタグ作成は禁止です 。
