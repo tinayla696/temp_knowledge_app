@@ -19,4 +19,4 @@ jobs:
         with:
           publish: true # 自動公開 (これをfalseにすると下書き保存になる)
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PROJECT_REPO_PAT }}
